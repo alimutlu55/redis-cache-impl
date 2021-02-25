@@ -22,13 +22,13 @@ public class CustomerCacheImpl implements CacheManager {
     @Override
     public void putToCash(Object object) {
         CustomerBean customerBean = (CustomerBean) object;
-        redisUtilCustomer.putMap(TABLE_CUSTOMER,CUSTOMER+customerBean.getId(),customerBean);
+        redisUtilCustomer.putMap(TABLE_CUSTOMER,CUSTOMER+customerBean.getCustomerNumber(),customerBean);
         redisUtilCustomer.setExpire(TABLE_CUSTOMER,1, TimeUnit.DAYS);
     }
 
 
-    public CustomerBean getValueFromCache(Long id) {
-        return redisUtilCustomer.getMapAsSingleEntry(TABLE_CUSTOMER,CUSTOMER+id);
+    public CustomerBean getValueFromCache(Long customerNumber) {
+        return redisUtilCustomer.getMapAsSingleEntry(TABLE_CUSTOMER,CUSTOMER+customerNumber);
     }
 
     @Override

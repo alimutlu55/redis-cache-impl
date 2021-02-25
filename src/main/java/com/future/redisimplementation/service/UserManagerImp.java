@@ -2,6 +2,7 @@ package com.future.redisimplementation.service;
 
 import com.future.redisimplementation.models.CustomerBean;
 import com.future.redisimplementation.repository.ICustomerDal;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -21,16 +22,16 @@ public class UserManagerImp implements UserManager {
     }
 
     @Override
-    public CustomerBean save(CustomerBean customerBean) {
+    public CustomerBean saveCustomer(CustomerBean customerBean) {
         customerBean.setInsertDate(new Date(System.currentTimeMillis()));
         return customerDal.save(customerBean);
     }
 
     @Override
-    public CustomerBean findById(long id) {
-        CustomerBean customerBean = (CustomerBean) cacheManager.getValueFromCache(id);
+    public CustomerBean findByCustomerNumber(long customerNumber) {
+        CustomerBean customerBean = (CustomerBean) cacheManager.getValueFromCache(customerNumber);
         if(customerBean == null){
-            customerBean = customerDal.findById(id).get();
+            customerBean = customerDal.findByCustomerNumber(customerNumber).get();
             cacheManager.putToCash(customerBean);
         }
         return customerBean;
@@ -39,6 +40,14 @@ public class UserManagerImp implements UserManager {
     @Override
     public Map<Object,CustomerBean> getAllCustomerFromCache() {
         return cacheManager.getMapAsAll();
+    }
+
+    @Override
+    public CustomerBean updateCustomer(CustomerBean customerBean) {
+        CustomerBean entity = customerDal.findByCustomerNumber(customerBean.getCustomerNumber()).get();
+        BeanUtils.copyProperties(customerBean, entity,new String[]{"id","insertDate"});
+        cacheManager.putToCash(entity);
+        return customerDal.save(entity);
     }
 
 

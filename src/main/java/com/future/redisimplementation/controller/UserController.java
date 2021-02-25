@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
-import java.util.Optional;
 
 @RestController
 public class UserController {
@@ -16,12 +15,12 @@ public class UserController {
 
     @PostMapping("customer")
     public CustomerBean saveCustomer(@RequestBody CustomerBean customerBean){
-       return  userManager.save(customerBean);
+       return  userManager.saveCustomer(customerBean);
     }
 
-    @GetMapping("customer/{id}")
-    public CustomerBean findById(@PathVariable long id){
-        return  userManager.findById(id);
+    @GetMapping("customer/{customerNumber}")
+    public CustomerBean findById(@PathVariable long customerNumber){
+        return  userManager.findByCustomerNumber(customerNumber);
     }
 
     @GetMapping("customer/cache")
@@ -29,4 +28,8 @@ public class UserController {
         return  userManager.getAllCustomerFromCache();
     }
 
+    @PutMapping("customer")
+    public CustomerBean updateCustomer(@RequestBody CustomerBean customerBean){
+        return  userManager.updateCustomer(customerBean);
+    }
 }
