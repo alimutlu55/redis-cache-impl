@@ -1,7 +1,5 @@
 package com.future.redisimplementation.service;
 
-import com.future.redisimplementation.models.CustomerBean;
-
 import java.util.Map;
 
 public interface CacheManager <T> {
